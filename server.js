@@ -9,8 +9,7 @@ const COUNTER_FILE = "./counter.json";
 // Enable CORS for all origins
 app.use(cors());
 
-// Root route (GET request)
-// Just get count, do not increment
+// Just read the counter
 app.get("/view", async (req, res) => {
   try {
     let data = await fs.readFile(COUNTER_FILE, "utf-8");
@@ -22,6 +21,7 @@ app.get("/view", async (req, res) => {
   }
 });
 
+// Increment and write to counter.json
 app.get("/", async (req, res) => {
   try {
     let data = await fs.readFile(COUNTER_FILE, "utf-8");
@@ -36,7 +36,6 @@ app.get("/", async (req, res) => {
   }
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`✅ Counter server running at http://localhost:${PORT}`);
 });
