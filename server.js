@@ -1,10 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
+const MONGODB_URI = process.env.MONGO_URI;
 
 const app = express();
 const PORT = process.env.PORT || 3001;
-const MONGODB_URI = "mongodb+srv://abhishekpinnaclegroup:CTNDy94EtaARCgyc@nripropertyviewcounter.6xvwd94.mongodb.net/"; // 🔁 Replace with your actual MongoDB URI
 
 app.use(cors());
 
