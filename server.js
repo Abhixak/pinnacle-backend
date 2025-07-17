@@ -4,7 +4,7 @@ const cors = require("cors");
 require("dotenv").config(); // Load MongoDB URI from .env
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
 // Replace this with your actual MongoDB URI in .env
 const MONGODB_URI = process.env.MONGO_URI;
