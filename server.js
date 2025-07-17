@@ -1,23 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-require("dotenv").config(); // Load MongoDB URI from .env
+require("dotenv").config(); // Load .env file
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT; // ✅ Use only Render-assigned port in production
 
-// Replace this with your actual MongoDB URI in .env
 const MONGODB_URI = process.env.MONGO_URI;
 
 // Middleware
 app.use(cors());
 
 // MongoDB connection
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(MONGODB_URI)
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => {
+    console.error("❌ MongoDB connection error:", err);
+    process.exit(1); // Stop the app if MongoDB fails
+  });
 
+// Mongoose schema & model
 const counterSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
   visits: { type: Number, default: 0 },
@@ -25,6 +28,7 @@ const counterSchema = new mongoose.Schema({
 
 const Counter = mongoose.model("Counter", counterSchema);
 
+// Initialize counter once if not present
 async function initializeCounter() {
   const existing = await Counter.findOne({ name: "pageViews" });
   if (!existing) {
@@ -32,7 +36,7 @@ async function initializeCounter() {
   }
 }
 
-// Route to get current count (without increment)
+// Route to get view count without increment
 app.get("/view", async (req, res) => {
   try {
     await initializeCounter();
@@ -60,6 +64,7 @@ app.get("/", async (req, res) => {
   }
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`✅ MongoDB Counter server running at http://localhost:${PORT}`);
 });
